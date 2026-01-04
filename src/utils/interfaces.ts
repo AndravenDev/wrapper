@@ -14,9 +14,14 @@ export interface EventInstance {
   title: string;
   eventId: number;
   withPartner: boolean;
-  locationId: number;
   positive: undefined;
   measurements: Measurement;
+  locations: EventLocation;
+  event_people: EventPeople[];
+}
+
+export interface EventPeople {
+  people: Person;
 }
 
 export interface Person {

@@ -1,11 +1,9 @@
-import { Field, Form, Formik } from "formik";
 import style from "./CreateEvent.module.scss";
 import supabase from "../../utils/supabase";
 import { useEffect, useState } from "react";
 import type {
   Category,
   EventLocation,
-  EventPeople,
   Measurement,
   Person,
 } from "../../utils/interfaces";
