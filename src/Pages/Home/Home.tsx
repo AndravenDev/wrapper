@@ -7,7 +7,7 @@ import "./Home.module.scss";
 import type { EventInstance } from "../../utils/interfaces";
 
 function Home() {
-  const [events, setEvents] = useState<EventInstance[] | null>([]);
+  const [events, setEvents] = useState<EventInstance[]>([]);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -17,11 +17,13 @@ function Home() {
   async function getEventInstances() {
     const { data } = await supabase
       .from("event")
-      .select(`*, categories!inner(hidden)`)
+      .select(`*, categories!inner(hidden), measurements!left(name)`)
       .eq("categories.hidden", false)
       .order("date", { ascending: false });
     console.log(data);
-    setEvents(data);
+    if (data?.length) {
+      setEvents(data);
+    }
   }
 
   function navigateToCreate() {
@@ -37,6 +39,11 @@ function Home() {
             <span className={style.title}>{todo.title}</span>
             <span>{new Date(todo.date).toLocaleDateString("en-UK")}</span>
             <p>{todo.description}</p>
+            <div>
+              <span className={style.title}>{todo.ammount ?? ""}</span>
+              <span>{todo?.measurements?.name}</span>
+            </div>
+
             <p>
               {todo.positive === null
                 ? ""

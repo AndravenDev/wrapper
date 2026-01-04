@@ -1,0 +1,14 @@
+.createWrapper {
+  background-color: rgb(83, 81, 79);
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+
+  .question {
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+}

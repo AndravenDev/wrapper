@@ -16,6 +16,7 @@ export interface EventInstance {
   withPartner: boolean;
   locationId: number;
   positive: undefined;
+  measurements: Measurement;
 }
 
 export interface Person {
