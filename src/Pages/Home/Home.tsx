@@ -19,7 +19,7 @@ function Home() {
       .from("event")
       .select(`*, categories!inner(hidden)`)
       .eq("categories.hidden", false)
-      .order("date");
+      .order("date", { ascending: false });
     console.log(data);
     setEvents(data);
   }

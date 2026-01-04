@@ -33,3 +33,8 @@ export interface EventLocation {
   name: string;
   preciseAddress: string;
 }
+
+export interface Measurement {
+  measurementId: number;
+  name: string;
+}

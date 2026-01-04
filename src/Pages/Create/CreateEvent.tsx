@@ -6,6 +6,7 @@ import type {
   Category,
   EventLocation,
   EventPeople,
+  Measurement,
   Person,
 } from "../../utils/interfaces";
 import { useNavigate } from "react-router";
@@ -14,12 +15,15 @@ export default function CreateEvent() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [people, setPeople] = useState<Person[]>([]);
   const [locations, setLocatioons] = useState<EventLocation[]>([]);
+  const [measurements, setMeasurements] = useState<Measurement[]>([]);
+
   let navigate = useNavigate();
 
   useEffect(() => {
     getCategories();
     getPeople();
     getLocations();
+    getMeasurements();
   }, []);
 
   async function getCategories() {
@@ -43,6 +47,14 @@ export default function CreateEvent() {
 
     if (data?.length) {
       setLocatioons(data);
+    }
+  }
+
+  async function getMeasurements() {
+    var { data } = await supabase.from("measurements").select();
+
+    if (data?.length) {
+      setMeasurements(data);
     }
   }
 
@@ -103,12 +115,12 @@ export default function CreateEvent() {
             date: "",
             title: "",
             description: "",
-            measurement: "",
             categoryId: categories?.length ? categories[0].id : 1,
             ammount: undefined,
             peopleChecked: [],
             withPartner: false,
             positive: undefined,
+            measurementId: undefined,
             locationId: undefined,
           }}
           onSubmit={async (values) => {
@@ -120,11 +132,11 @@ export default function CreateEvent() {
                 date: values.date ? values.date : new Date(),
                 title: values.title,
                 description: values.description,
-                measurement: values.measurement,
                 categoryId: values.categoryId,
                 ammount: values.ammount,
                 withPartner: values.withPartner,
                 locationId: values.locationId,
+                measurementId: values.measurementId,
                 positive: values.positive
                   ? values.positive === "false"
                     ? false
@@ -262,7 +274,27 @@ export default function CreateEvent() {
               </div>
               <div className={style.question}>
                 <label htmlFor="measurement">Measurement</label>
-                <Field type="text" id="measurement" name="measurement" />
+                <select
+                  name="measurement"
+                  onChange={(value) => {
+                    setFieldValue("measurementId", parseInt(value.target.value));
+                  }}
+                >
+                  <option disabled selected value={0}>
+                    {" "}
+                    -- select an option --{" "}
+                  </option>
+                  {measurements?.map((measurement) => {
+                    return (
+                      <option
+                        value={measurement.measurementId.toString()}
+                        key={measurement.measurementId.toString()}
+                      >
+                        {measurement.name}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
               <div className={style.question}>
                 <label htmlFor="ammount">Ammount</label>
@@ -338,6 +370,39 @@ export default function CreateEvent() {
                 name="preciseAddress"
                 placeholder="Location Name"
               />
+            </div>
+
+            <button type="submit">Submit</button>
+          </Form>
+        </Formik>
+      </div>
+      <div className={style.createWrapper}>
+        <p>Create Measurement</p>
+        <Formik
+          initialValues={{
+            name: "",
+          }}
+          onSubmit={async (values) => {
+            const { data, error } = await supabase
+              .from("measurements")
+              .insert({ ...values })
+              .select();
+
+            if (error) {
+              console.log(error);
+              alert(error.details);
+            }
+            if (data?.length) {
+              alert("Success");
+              setMeasurements([...measurements, data[0]]);
+              values.name = "";
+            }
+          }}
+        >
+          <Form>
+            <div className={style.question}>
+              <label htmlFor="name">Measurement Name</label>
+              <Field id="name" name="name" placeholder="Measurement Name" />
             </div>
 
             <button type="submit">Submit</button>
