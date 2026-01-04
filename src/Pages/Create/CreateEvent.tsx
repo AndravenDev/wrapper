@@ -2,15 +2,13 @@ import { Field, Form, Formik } from "formik";
 import style from "./CreateEvent.module.scss";
 import supabase from "../../utils/supabase";
 import { useEffect, useState } from "react";
-import type {
-  Category,
-  EventPeople,
-  Person,
-} from "../../utils/interfaces";
+import type { Category, EventPeople, Person } from "../../utils/interfaces";
+import { useNavigate } from "react-router";
 
 export default function CreateEvent() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [people, setPeople] = useState<Person[]>([]);
+  let navigate = useNavigate();
 
   useEffect(() => {
     getCategories();
@@ -20,7 +18,7 @@ export default function CreateEvent() {
   async function getCategories() {
     var { data } = await supabase.from("categories").select();
 
-    if(data?.length){
+    if (data?.length) {
       setCategories(data);
     }
   }
@@ -28,37 +26,57 @@ export default function CreateEvent() {
   async function getPeople() {
     var { data } = await supabase.from("people").select();
 
-    if(data?.length){
+    if (data?.length) {
       setPeople(data);
     }
   }
 
   return (
     <div className={style.test}>
+      <button
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Home
+      </button>
       <div className={style.createWrapper}>
         <p>Create Category</p>
         <Formik
           initialValues={{
             name: "",
+            hidden: false,
           }}
           onSubmit={async (values) => {
             const { data, error } = await supabase
               .from("categories")
-              .insert({ name: values.name }).select();
+              .insert({ name: values.name, hidden: values.hidden })
+              .select();
 
-            if(data?.length){
+            if (data?.length) {
               setCategories([...categories, data[0]]);
             }
-            
+
             if (error) {
+              console.log(error);
               alert("There has been an issue");
+            } else {
+              values.name = "";
+              values.hidden = false;
             }
-            values.name = "";
           }}
         >
           <Form>
-            <label htmlFor="name">Category Name</label>
-            <Field id="name" name="name" placeholder="Category Name" />
+            <div className={style.question}>
+              <label htmlFor="name">Category Name</label>
+              <Field id="name" name="name" placeholder="Category Name" />
+            </div>
+
+            <div className={style.question}>
+              <label htmlFor="hidden">Hide this event from this category</label>
+              <Field type="checkbox" id="hidden" name="hidden" />
+            </div>
+
             <button type="submit">Submit</button>
           </Form>
         </Formik>
@@ -104,8 +122,8 @@ export default function CreateEvent() {
             var eventId = data?.pop()?.eventId;
             var event_people: EventPeople[] = [];
 
-            if(eventId) {
-              alert('Success');
+            if (eventId) {
+              alert("Success");
               values.title = "";
               values.description = "";
             }
@@ -135,7 +153,10 @@ export default function CreateEvent() {
                     setFieldValue("categoryId", parseInt(value.target.value));
                   }}
                 >
-                  <option disabled selected value={0}> -- select an option -- </option>
+                  <option disabled selected value={0}>
+                    {" "}
+                    -- select an option --{" "}
+                  </option>
                   {categories?.map((category) => {
                     return (
                       <option
@@ -219,11 +240,12 @@ export default function CreateEvent() {
           onSubmit={async (values) => {
             const { data, error } = await supabase
               .from("people")
-              .insert({ name: values.name }).select();
+              .insert({ name: values.name })
+              .select();
 
-              if(data?.length){
-                setPeople([...people, data[0]])
-              }
+            if (data?.length) {
+              setPeople([...people, data[0]]);
+            }
             if (error) {
               console.log("error", error);
               alert("There has been an issue");

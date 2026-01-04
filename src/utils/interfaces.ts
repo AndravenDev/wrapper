@@ -3,6 +3,7 @@ export interface Category {
    count: number;
    name: string;
    sum: number;
+   hidden: number;
 }
 
 export interface EventInstance {
