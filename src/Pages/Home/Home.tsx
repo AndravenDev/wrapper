@@ -47,8 +47,14 @@ function Home() {
             <span>On: {new Date(todo.date).toLocaleDateString("en-UK")}</span>
             <p>Details: {todo.description}</p>
             <div>
-              <span className={style.title}>{todo.ammount ?? ""}</span>
-              <span>{todo?.measurements?.name}</span>
+              {todo.ammount ? (
+                <>
+                  <span className={style.title}>{todo.ammount}</span>
+                  <span>{todo?.measurements?.name}</span>
+                </>
+              ) : (
+                ""
+              )}
             </div>
             <p>At: {todo?.locations?.name}</p>
             {todo.event_people.length ? (
