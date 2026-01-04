@@ -17,10 +17,15 @@ export interface EventInstance {
   positive: undefined;
   measurements: Measurement;
   locations: EventLocation;
-  event_people: EventPeople[];
+  event_people: People[];
 }
 
 export interface EventPeople {
+  personId: number;
+  eventId: number;
+}
+
+export interface People {
   people: Person;
 }
 

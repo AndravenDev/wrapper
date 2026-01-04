@@ -56,7 +56,7 @@ function Home() {
                 <p>With: </p>
                 {todo.event_people.map((event_person) => {
                   return (
-                    <p key={event_person.personId}>
+                    <p key={event_person.people.personId}>
                       {event_person.people.name}
                     </p>
                   );
