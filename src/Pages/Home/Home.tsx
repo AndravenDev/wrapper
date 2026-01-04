@@ -18,7 +18,8 @@ function Home() {
     const { data } = await supabase
       .from("event")
       .select(`*, categories!inner(hidden)`)
-      .eq("categories.hidden", false);
+      .eq("categories.hidden", false)
+      .order("date");
     console.log(data);
     setEvents(data);
   }
@@ -33,10 +34,15 @@ function Home() {
       {events?.map((todo) => {
         return (
           <li key={todo.eventId} className={style.question}>
-            <p>{todo.title}</p>
+            <span className={style.title}>{todo.title}</span>
+            <span>{new Date(todo.date).toLocaleDateString("en-UK")}</span>
             <p>{todo.description}</p>
             <p>
-              {todo.positive ? "It was good" : "It was bad"}
+              {todo.positive === null
+                ? ""
+                : todo.positive === true
+                ? "Good Experience"
+                : "Bad Experience"}
             </p>
           </li>
         );

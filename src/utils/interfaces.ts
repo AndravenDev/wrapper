@@ -14,6 +14,7 @@ export interface EventInstance {
   title: string;
   eventId: number;
   withPartner: boolean;
+  locationId: number;
   positive: undefined;
 }
 
@@ -25,4 +26,10 @@ export interface Person {
 export interface EventPeople {
   eventId: number;
   personId: number;
+}
+
+export interface EventLocation {
+  locationId: number;
+  name: string;
+  preciseAddress: string;
 }

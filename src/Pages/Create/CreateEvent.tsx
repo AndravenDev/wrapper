@@ -2,17 +2,24 @@ import { Field, Form, Formik } from "formik";
 import style from "./CreateEvent.module.scss";
 import supabase from "../../utils/supabase";
 import { useEffect, useState } from "react";
-import type { Category, EventPeople, Person } from "../../utils/interfaces";
+import type {
+  Category,
+  EventLocation,
+  EventPeople,
+  Person,
+} from "../../utils/interfaces";
 import { useNavigate } from "react-router";
 
 export default function CreateEvent() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [people, setPeople] = useState<Person[]>([]);
+  const [locations, setLocatioons] = useState<EventLocation[]>([]);
   let navigate = useNavigate();
 
   useEffect(() => {
     getCategories();
     getPeople();
+    getLocations();
   }, []);
 
   async function getCategories() {
@@ -28,6 +35,14 @@ export default function CreateEvent() {
 
     if (data?.length) {
       setPeople(data);
+    }
+  }
+
+  async function getLocations() {
+    var { data } = await supabase.from("locations").select();
+
+    if (data?.length) {
+      setLocatioons(data);
     }
   }
 
@@ -94,6 +109,7 @@ export default function CreateEvent() {
             peopleChecked: [],
             withPartner: false,
             positive: undefined,
+            locationId: undefined,
           }}
           onSubmit={async (values) => {
             console.log(values);
@@ -108,6 +124,7 @@ export default function CreateEvent() {
                 categoryId: values.categoryId,
                 ammount: values.ammount,
                 withPartner: values.withPartner,
+                locationId: values.locationId,
                 positive: values.positive
                   ? values.positive === "false"
                     ? false
@@ -170,6 +187,30 @@ export default function CreateEvent() {
                 </select>
               </div>
               <div className={style.question}>
+                <label htmlFor="location">Locations</label>
+                <select
+                  name="location"
+                  onChange={(value) => {
+                    setFieldValue("locationId", parseInt(value.target.value));
+                  }}
+                >
+                  <option disabled selected value={0}>
+                    {" "}
+                    -- select an option --{" "}
+                  </option>
+                  {locations?.map((location) => {
+                    return (
+                      <option
+                        value={location.locationId.toString()}
+                        key={location.locationId.toString()}
+                      >
+                        {location.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div className={style.question}>
                 <label htmlFor="withPartner">I was with my partner</label>
                 <Field type="checkbox" id="withPartner" name="withPartner" />
               </div>
@@ -217,7 +258,7 @@ export default function CreateEvent() {
               <button type="submit">Submit</button>
               <div className={style.question}>
                 <label htmlFor="date">Custom Date?</label>
-                <Field type="date" id="date" name="date" />
+                <Field type="datetime-local" id="date" name="date" />
               </div>
               <div className={style.question}>
                 <label htmlFor="measurement">Measurement</label>
@@ -256,6 +297,49 @@ export default function CreateEvent() {
           <Form>
             <label htmlFor="name">Person Name</label>
             <Field id="name" name="name" placeholder="Category Name" />
+            <button type="submit">Submit</button>
+          </Form>
+        </Formik>
+      </div>
+      <div className={style.createWrapper}>
+        <p>Create Location</p>
+        <Formik
+          initialValues={{
+            name: "",
+            preciseAddress: "",
+          }}
+          onSubmit={async (values) => {
+            const { data, error } = await supabase
+              .from("locations")
+              .insert({ ...values })
+              .select();
+
+            if (error) {
+              console.log(error);
+              alert(error.details);
+            }
+            if (data?.length) {
+              alert("Success");
+              setLocatioons([...locations, data[0]]);
+              values.name = "";
+              values.preciseAddress = "";
+            }
+          }}
+        >
+          <Form>
+            <div className={style.question}>
+              <label htmlFor="name">Location Name</label>
+              <Field id="name" name="name" placeholder="Location Name" />
+            </div>
+            <div className={style.question}>
+              <label htmlFor="preciseAddress">Precise Address</label>
+              <Field
+                id="preciseAddress"
+                name="preciseAddress"
+                placeholder="Location Name"
+              />
+            </div>
+
             <button type="submit">Submit</button>
           </Form>
         </Formik>
