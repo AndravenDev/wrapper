@@ -37,84 +37,100 @@ function Home() {
     navigate(`createEvent/${id ?? ''}`);
   }
 
-  return (
-    <div>
-      <button onClick={() => navigateToCreate()}>Create Page</button>
-      <button onClick={() => {
-        navigate("dailySummary");
-      }}>Monthly Summary</button>
-      {events?.map((todo) => {
-        return (
-          <li key={todo.eventId} className={style.question}>
-            <div className={style.mainCardContent}>
-              <span className={style.title}>{todo.title}</span>
-              <button onClick={() => { navigateToCreate(todo.eventId); }}>Edit</button>
-              <p>Details: {todo.description}</p>
-              <div className={style.eventPeople}>
-                {todo.event_people.length ? (
-                  <div>
-                    <span>With: </span>
-                    {todo.event_people.map((event_person, index) => {
-                      return (
-                        <span
-                          className={style.eventPerson}
-                          key={event_person.people.personId}
-                        >
-                          {event_person.people.name}
-                          {index === todo.event_people.length - 1 ? "" : ","}
-                        </span>
-                      );
-                    })}
-                    <span className={style.metadata}>
-                      {todo.withPartner ? "and Krisi" : ""}
-                    </span>
-                  </div>
-                ) : (
-                  <p className={style.metadata}>
-                    {todo.withPartner ? "With Krisi" : "By yourself"}
-                  </p>
-                )}
-              </div>
-            </div>
+  // Group events by date
+  const groupedEvents = events.reduce((groups, event) => {
+    const dateKey = new Date(event.date).toLocaleDateString("en-UK");
+    if (!groups[dateKey]) {
+      groups[dateKey] = [];
+    }
+    groups[dateKey].push(event);
+    return groups;
+  }, {} as Record<string, EventInstance[]>);
 
-            <div className={style.eventMetaData}>
-              <div>
-                <span>
-                  On:{" "}
-                  <span className={style.metadata}>
-                    {new Date(todo.date).toLocaleDateString("en-UK")}
-                  </span>
-                </span>
-                <p>
-                  At:{" "}
-                  <span className={style.metadata}>
-                    {todo?.locations?.name}
-                  </span>
-                </p>
-                <div>
-                  {todo.ammount ? (
-                    <>
-                      <span className={`${style.ammount} ${style.metadata}`}>
-                        {todo.ammount}
+  return (
+    <div className={style.container}>
+      <h1>Your Events</h1>
+      <div className={style.actions}>
+        <button onClick={() => navigateToCreate()}>Create Event</button>
+        <button onClick={() => {
+          navigate("dailySummary");
+        }}>Monthly Summary</button>
+      </div>
+      <div className={style.eventsList}>
+        {Object.entries(groupedEvents).map(([date, dayEvents]) => (
+          <div key={date} className={style.dayGroup}>
+            <h2 className={style.dateHeader}>{date}</h2>
+            <ul className={style.dayEvents}>
+              {dayEvents.map((todo) => (
+                <li key={todo.eventId} className={style.question}>
+                  <div className={style.mainCardContent}>
+                    <span className={style.title}>{todo.title}</span>
+                    <button onClick={() => { navigateToCreate(todo.eventId); }}>Edit</button>
+                    <p>Details: {todo.description}</p>
+                    <div className={style.eventPeople}>
+                      {todo.event_people.length ? (
+                        <div>
+                          <span>With: </span>
+                          {todo.event_people.map((event_person, index) => (
+                            <span
+                              className={style.eventPerson}
+                              key={event_person.people.personId}
+                            >
+                              {event_person.people.name}
+                              {index === todo.event_people.length - 1 ? "" : ","}
+                            </span>
+                          ))}
+                          <span className={style.metadata}>
+                            {todo.withPartner ? " and Krisi" : ""}
+                          </span>
+                        </div>
+                      ) : (
+                        <p className={style.metadata}>
+                          {todo.withPartner ? "With Krisi" : "By yourself"}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className={style.eventMetaData}>
+                    <div>
+                      <span>
+                        On:{" "}
+                        <span className={style.metadata}>
+                          {new Date(todo.date).toLocaleDateString("en-UK")}
+                        </span>
                       </span>
-                      <span>{todo?.measurements?.name}</span>
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </div>
-                <p className={`${style.rating} ${style.metadata}`}>
-                  {todo.positive === null
-                    ? ""
-                    : todo.positive === true
-                    ? "Good Experience"
-                    : "Bad Experience"}
-                </p>
-              </div>
-            </div>
-          </li>
-        );
-      })}
+                      <p>
+                        At:{" "}
+                        <span className={style.metadata}>
+                          {todo?.locations?.name}
+                        </span>
+                      </p>
+                      <div>
+                        {todo.ammount ? (
+                          <>
+                            <span className={`${style.ammount} ${style.metadata}`}>
+                              {todo.ammount}
+                            </span>
+                            <span> {todo?.measurements?.name}</span>
+                          </>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                      {todo.positive !== null && (
+                        <p className={`${style.rating} ${todo.positive ? style.good : style.bad}`}>
+                          {todo.positive ? "Good Experience" : "Bad Experience"}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,26 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
 import supabase from "../../utils/supabase";
 import style from "./DailySummary.module.scss";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface PersonMet {
   personId: number;
@@ -32,6 +51,11 @@ interface CategorySummary {
   eventCount: number;
 }
 
+interface DailySpending {
+  date: string;
+  amount: number;
+}
+
 type LocationSortOption = "none" | "spending" | "visits";
 
 export default function DailySummary() {
@@ -47,6 +71,9 @@ export default function DailySummary() {
   const [selectedPerson, setSelectedPerson] = useState<PersonMet | null>(null);
   const [personEvents, setPersonEvents] = useState<LocationEvent[]>([]);
   const [totalSpent, setTotalSpent] = useState(0);
+  const [dailySpending, setDailySpending] = useState<DailySpending[]>([]);
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [dayEvents, setDayEvents] = useState<LocationEvent[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,6 +81,7 @@ export default function DailySummary() {
     getNumberOfPeople();
     getCategories();
     getSpending();
+    getDailySpending();
     getLocationsVisited();
   }, []);
 
@@ -156,6 +184,34 @@ export default function DailySummary() {
     setTotalSpent(result);
   }
 
+  async function getDailySpending() {
+    const { data, error } = await supabase
+      .from("event")
+      .select("date, ammount")
+      .eq("measurementId", 1)
+      .order("date", { ascending: true });
+
+    if (error) {
+      console.log("Error fetching daily spending: ", error);
+      return;
+    }
+
+    if (data?.length) {
+      // Aggregate spending by day
+      const spendingByDay = new Map<string, number>();
+      data.forEach((event: { date: string; ammount: number }) => {
+        const dateKey = new Date(event.date).toLocaleDateString("en-UK");
+        const existing = spendingByDay.get(dateKey) ?? 0;
+        spendingByDay.set(dateKey, existing + (event.ammount ?? 0));
+      });
+
+      const result: DailySpending[] = Array.from(spendingByDay.entries()).map(
+        ([date, amount]) => ({ date, amount })
+      );
+      setDailySpending(result);
+    }
+  }
+
   async function getLocationsVisited() {
     const { data, error } = await supabase
       .from("event")
@@ -196,6 +252,81 @@ export default function DailySummary() {
     if (locationSort === "visits") return b.visitCount - a.visitCount;
     return 0;
   });
+
+  const chartData = {
+    labels: dailySpending.map((d) => d.date),
+    datasets: [
+      {
+        label: "Amount Spent",
+        data: dailySpending.map((d) => Math.round(d.amount * 100) / 100),
+        backgroundColor: "rgba(102, 126, 234, 0.6)",
+        borderColor: "#667eea",
+        borderWidth: 2,
+        borderRadius: 6,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    onClick: (_event: unknown, elements: { index: number }[]) => {
+      if (elements.length > 0) {
+        const index = elements[0].index;
+        const clickedDate = dailySpending[index].date;
+        handleDayClick(clickedDate);
+      }
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          color: "rgba(255, 255, 255, 0.1)",
+        },
+        ticks: {
+          color: "rgba(255, 255, 255, 0.7)",
+        },
+      },
+      y: {
+        grid: {
+          color: "rgba(255, 255, 255, 0.1)",
+        },
+        ticks: {
+          color: "rgba(255, 255, 255, 0.7)",
+        },
+      },
+    },
+  };
+
+  async function handleDayClick(dateStr: string) {
+    setSelectedDay(dateStr);
+
+    // Parse the date string (dd/mm/yyyy) to create date range
+    const [day, month, year] = dateStr.split("/").map(Number);
+    const startDate = new Date(Date.UTC(year, month - 1, day));
+    const endDate = new Date(Date.UTC(year, month - 1, day + 1));
+
+    const { data, error } = await supabase
+      .from("event")
+      .select("eventId, title, description, date, ammount, measurements!left(name), locations!left(name)")
+      .gte("date", startDate.toISOString())
+      .lt("date", endDate.toISOString())
+      .order("date", { ascending: false });
+
+    if (error) {
+      console.log("Error fetching day events: ", error);
+      return;
+    }
+
+    setDayEvents(data ?? []);
+  }
 
   async function handleLocationClick(location: LocationVisited) {
     if (selectedLocation?.locationId === location.locationId) {
@@ -355,7 +486,12 @@ export default function DailySummary() {
       </div>
 
       <div className={style.stat}>
-        <p>You spent <strong>{totalSpent}</strong> in total</p>
+        <p>You spent <strong>{totalSpent.toFixed(2)}</strong> in total</p>
+        {dailySpending.length > 0 && (
+          <div className={style.chartContainer}>
+            <Bar data={chartData} options={chartOptions} />
+          </div>
+        )}
       </div>
 
       <div className={style.stat}>
@@ -390,7 +526,7 @@ export default function DailySummary() {
                   onClick={() => handleLocationClick(location)}
                   className={`${style.locationItem} ${selectedLocation?.locationId === location.locationId ? style.selected : ""}`}
                 >
-                  {location.name} - {location.visitCount} visits, {location.totalSpent} spent
+                  {location.name} - {location.visitCount} visits, {location.totalSpent.toFixed(2)} spent
                 </li>
               ))}
             </ul>
@@ -418,6 +554,35 @@ export default function DailySummary() {
           )}
         </div>
       </div>
+
+      {selectedDay && (
+        <div className={style.modalOverlay} onClick={() => setSelectedDay(null)}>
+          <div className={style.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={style.modalHeader}>
+              <h3>Events on {selectedDay}</h3>
+              <button onClick={() => setSelectedDay(null)}>×</button>
+            </div>
+            <div className={style.modalContent}>
+              {dayEvents.length > 0 ? (
+                <ul>
+                  {dayEvents.map((event) => (
+                    <li key={event.eventId} className={style.eventItem}>
+                      <strong>{event.title}</strong>
+                      <p>{event.description}</p>
+                      <span className={style.eventMeta}>
+                        {event.locations?.name ? `@ ${event.locations.name}` : ""}
+                        {event.ammount ? ` - ${event.ammount} ${event.measurements?.name ?? ""}` : ""}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No events found for this day</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
