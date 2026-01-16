@@ -86,6 +86,79 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.searchContainer {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.searchInput {
+  width: 100%;
+  max-width: 300px;
+  padding: 12px 16px;
+  padding-left: 40px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 25px;
+  color: white;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 12px center;
+  background-size: 20px;
+
+  &:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 5px;
+  padding: 8px 0;
+  background: linear-gradient(145deg, #1a1a2e, #16213e);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 12px;
+  list-style: none;
+  z-index: 100;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  animation: dropDown 0.2s ease;
+
+  @keyframes dropDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  li {
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.9rem;
+
+    &:hover {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+      padding-left: 20px;
+    }
+  }
+}
+
 .sortOptions {
   margin: 15px 0;
   display: flex;
