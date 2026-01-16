@@ -146,7 +146,7 @@ export default function CreateCustomEvent({
             </div>
             <div className={style.question}>
               <label htmlFor="description">Description</label>
-              <Field type="text" id="description" name="description"></Field>
+              <Field as="textarea" id="description" name="description" rows={4} placeholder="What happened..."></Field>
             </div>
             <div className={style.question}>
               <label htmlFor="people">Who was there</label>
