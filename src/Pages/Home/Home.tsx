@@ -33,18 +33,22 @@ function Home() {
     }
   }
 
-  function navigateToCreate() {
-    navigate("createEvent");
+  function navigateToCreate(id?: number) {
+    navigate(`createEvent/${id ?? ''}`);
   }
 
   return (
     <div>
-      <button onClick={navigateToCreate}>Create Page</button>
+      <button onClick={() => navigateToCreate()}>Create Page</button>
+      <button onClick={() => {
+        navigate("dailySummary");
+      }}>Monthly Summary</button>
       {events?.map((todo) => {
         return (
           <li key={todo.eventId} className={style.question}>
             <div className={style.mainCardContent}>
               <span className={style.title}>{todo.title}</span>
+              <button onClick={() => { navigateToCreate(todo.eventId); }}>Edit</button>
               <p>Details: {todo.description}</p>
               <div className={style.eventPeople}>
                 {todo.event_people.length ? (
