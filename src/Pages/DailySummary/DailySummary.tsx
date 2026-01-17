@@ -70,10 +70,6 @@ export default function DailySummary() {
   const [locationEvents, setLocationEvents] = useState<LocationEvent[]>([]);
   const [selectedPerson, setSelectedPerson] = useState<PersonMet | null>(null);
   const [personEvents, setPersonEvents] = useState<LocationEvent[]>([]);
-  const [peopleSearch, setPeopleSearch] = useState("");
-  const [peopleSearchFocused, setPeopleSearchFocused] = useState(false);
-  const [locationSearch, setLocationSearch] = useState("");
-  const [locationSearchFocused, setLocationSearchFocused] = useState(false);
   const [totalSpent, setTotalSpent] = useState(0);
   const [dailySpending, setDailySpending] = useState<DailySpending[]>([]);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
@@ -256,26 +252,6 @@ export default function DailySummary() {
     if (locationSort === "visits") return b.visitCount - a.visitCount;
     return 0;
   });
-
-  const filteredPeople = peopleMet.filter((person) =>
-    person.name.toLowerCase().includes(peopleSearch.toLowerCase())
-  );
-
-  const peopleSuggestions = peopleSearch
-    ? peopleMet.filter((person) =>
-        person.name.toLowerCase().includes(peopleSearch.toLowerCase())
-      ).slice(0, 5)
-    : [];
-
-  const filteredLocations = sortedLocations.filter((location) =>
-    location.name.toLowerCase().includes(locationSearch.toLowerCase())
-  );
-
-  const locationSuggestions = locationSearch
-    ? sortedLocations.filter((location) =>
-        location.name.toLowerCase().includes(locationSearch.toLowerCase())
-      ).slice(0, 5)
-    : [];
 
   const chartData = {
     labels: dailySpending.map((d) => d.date),
@@ -470,36 +446,10 @@ export default function DailySummary() {
 
       <div className={style.stat}>
         <p>You met <strong>{peopleMet.length}</strong> people</p>
-        <div className={style.searchContainer}>
-          <input
-            type="text"
-            placeholder="Search people..."
-            value={peopleSearch}
-            onChange={(e) => setPeopleSearch(e.target.value)}
-            onFocus={() => setPeopleSearchFocused(true)}
-            onBlur={() => setTimeout(() => setPeopleSearchFocused(false), 200)}
-            className={style.searchInput}
-          />
-          {peopleSearchFocused && peopleSuggestions.length > 0 && (
-            <ul className={style.suggestions}>
-              {peopleSuggestions.map((person) => (
-                <li
-                  key={person.personId}
-                  onClick={() => {
-                    setPeopleSearch(person.name);
-                    handlePersonClick(person);
-                  }}
-                >
-                  {person.name} - {person.eventCount} events
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
         <div className={style.locationsContainer}>
-          {filteredPeople.length > 0 && (
+          {peopleMet.length > 0 && (
             <ul className={style.locationsList}>
-              {filteredPeople.map((person) => (
+              {peopleMet.map((person) => (
                 <li
                   key={person.personId}
                   onClick={() => handlePersonClick(person)}
@@ -546,32 +496,6 @@ export default function DailySummary() {
 
       <div className={style.stat}>
         <p>You visited <strong>{locationsVisited.length}</strong> locations</p>
-        <div className={style.searchContainer}>
-          <input
-            type="text"
-            placeholder="Search locations..."
-            value={locationSearch}
-            onChange={(e) => setLocationSearch(e.target.value)}
-            onFocus={() => setLocationSearchFocused(true)}
-            onBlur={() => setTimeout(() => setLocationSearchFocused(false), 200)}
-            className={style.searchInput}
-          />
-          {locationSearchFocused && locationSuggestions.length > 0 && (
-            <ul className={style.suggestions}>
-              {locationSuggestions.map((location) => (
-                <li
-                  key={location.locationId}
-                  onClick={() => {
-                    setLocationSearch(location.name);
-                    handleLocationClick(location);
-                  }}
-                >
-                  {location.name} - {location.visitCount} visits
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
         <div className={style.sortOptions}>
           <span>Sort by: </span>
           <button
@@ -594,9 +518,9 @@ export default function DailySummary() {
           </button>
         </div>
         <div className={style.locationsContainer}>
-          {filteredLocations.length > 0 && (
+          {sortedLocations.length > 0 && (
             <ul className={style.locationsList}>
-              {filteredLocations.map((location) => (
+              {sortedLocations.map((location) => (
                 <li
                   key={location.locationId}
                   onClick={() => handleLocationClick(location)}
