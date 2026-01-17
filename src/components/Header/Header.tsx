@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router";
 import style from "./Header.module.scss";
-import { useEffect, useState } from "react";
-import supabase from "../../utils/supabase";
 
 export default function Header() {
   let navigate = useNavigate();
