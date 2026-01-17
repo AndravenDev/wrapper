@@ -76,7 +76,7 @@ export default function DailySummary() {
   const [locationSearchFocused, setLocationSearchFocused] = useState(false);
   const [totalSpent, setTotalSpent] = useState(0);
   const [dailySpending, setDailySpending] = useState<DailySpending[]>([]);
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  // const [selectedDay, setSelectedDay] = useState<string | null>(null);
   // const [dayEvents, setDayEvents] = useState<LocationEvent[]>([]);
   const navigate = useNavigate();
 
@@ -298,7 +298,7 @@ export default function DailySummary() {
     onClick: (_event: unknown, elements: { index: number }[]) => {
       if (elements.length > 0) {
         const index = elements[0].index;
-        const clickedDate = dailySpending[index].date;
+        // const clickedDate = dailySpending[index].date;
         // handleDayClick(clickedDate);
       }
     },
