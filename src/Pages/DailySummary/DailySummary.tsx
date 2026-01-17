@@ -148,16 +148,15 @@ export default function DailySummary() {
     if (data?.length) {
       // Count events per category
       const categoryCount = new Map<number, CategorySummary>();
-      data.forEach((item: { categoryId: number; categories: { id: number; name: string; hidden: any }[] }) => {
-        if (item.categories && item.categories.length > 0) {
-          const category = item.categories[0]; // Access first category or iterate
-          const existing = categoryCount.get(category.id);
+      data.forEach((item: { categoryId: number; categories: { id: number; name: string } }) => {
+        if (item.categories) {
+          const existing = categoryCount.get(item.categories.id);
           if (existing) {
             existing.eventCount += 1;
           } else {
-            categoryCount.set(category.id, {
-              id: category.id,
-              name: category.name,
+            categoryCount.set(item.categories.id, {
+              id: item.categories.id,
+              name: item.categories.name,
               eventCount: 1,
             });
           }
