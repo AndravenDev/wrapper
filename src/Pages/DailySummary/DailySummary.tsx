@@ -579,14 +579,14 @@ export default function DailySummary() {
                 <li
                   key={location.locationId}
                   // onClick={() => handleLocationClick(location)}
-                  className={`${style.locationItem} ${selectedLocation?.locationId === location.locationId ? style.selected : ""}`}
+                  // className={`${style.locationItem} ${selectedLocation?.locationId === location.locationId ? style.selected : ""}`}
                 >
                   {location.name} - {location.visitCount} visits, {location.totalSpent.toFixed(2)} spent
                 </li>
               ))}
             </ul>
           )}
-          {selectedLocation && (
+          {/* {selectedLocation && (
             <div className={style.eventsPanel}>
               <h4>Events at {selectedLocation.name}</h4>
               {locationEvents.length > 0 ? (
@@ -606,11 +606,11 @@ export default function DailySummary() {
                 <p>No events found</p>
               )}
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
-      {selectedDay && (
+      {/* {selectedDay && (
         <div className={style.modalOverlay} onClick={() => setSelectedDay(null)}>
           <div className={style.modal} onClick={(e) => e.stopPropagation()}>
             <div className={style.modalHeader}>
@@ -637,7 +637,7 @@ export default function DailySummary() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
