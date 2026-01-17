@@ -2,8 +2,6 @@
   padding: 3px 3px 3px 3px;
   border-radius: 10px;
   margin-bottom: 10px;
-
-
 }
 
 .goodExperience {
@@ -12,8 +10,8 @@
 }
 
 .midExperience {
-background: #2A7B9B;
-background: linear-gradient(199deg, rgba(42, 123, 155, 0.19) 43%, rgba(69, 233, 228, 1) 100%);
+  background: #2A7B9B;
+  background: linear-gradient(199deg, rgba(42, 123, 155, 0.19) 43%, rgba(69, 233, 228, 1) 100%);
 }
 
 .badExperience {
@@ -21,12 +19,27 @@ background: linear-gradient(199deg, rgba(42, 123, 155, 0.19) 43%, rgba(69, 233, 
   background: linear-gradient(199deg, rgba(42, 123, 155, 0.19) 43%, rgba(233, 69, 96, 1) 100%);
 }
 
+.goodExperience:hover  {
+  background: #2A7B9B;
+  background: linear-gradient(269deg,rgba(42, 123, 155, 0.19) 43%, rgba(69, 233, 96, 1) 100%);
+}
+
+.midExperience:hover  {
+  background: #2A7B9B;
+  background: linear-gradient(269deg, rgba(42, 123, 155, 0.19) 43%, rgba(69, 233, 228, 1) 100%);
+}
+
+.badExperience:hover {
+  background: #2A7B9B;
+  background: linear-gradient(269deg, rgba(42, 123, 155, 0.19) 43%, rgba(233, 69, 96, 1) 100%);
+}
+
 .eventCard {
   padding: 10px;
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
-  background-color: #0F3460;
+  background-color: #16213E;
 
   .mainCardContent {
     .title {

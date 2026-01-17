@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import supabase from "../../utils/supabase";
-import { useNavigate } from "react-router";
 import style from "./Home.module.scss";
 import type { EventInstance } from "../../utils/interfaces";
 import EventCard from "../../components/EventCard/EventCard";
 
 function Home() {
   const [events, setEvents] = useState<EventInstance[]>([]);
-  let navigate = useNavigate();
+
 
   useEffect(() => {
     getEventInstances();
@@ -33,18 +32,8 @@ function Home() {
     }
   }
 
-  function navigateToCreate() {
-    navigate("createEvent");
-  }
-
-  function navigateToSummary() {
-    navigate("summary");
-  }
-
   return (
     <div className={style.homeWrapper}>
-      <button onClick={navigateToCreate}>Create Page</button>
-      <button onClick={navigateToSummary}>Summary</button>
       {events?.map((event) => (
         <EventCard key={event.eventId} event={event} />
       ))}

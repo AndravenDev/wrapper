@@ -1,0 +1,20 @@
+.navWrapper {
+  display: flex;
+  background-color: #16213e;
+  padding: 10px;
+  margin-bottom: 15px;
+
+  .info {
+  }
+
+  .buttonWrapper {
+    margin-left: auto;
+    .navBtn {
+        background: none;
+    }
+
+    .primaryLink {
+        background-color: #E94560;
+    }
+  }
+}
