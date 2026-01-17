@@ -12,7 +12,6 @@ import {
 import { Bar } from "react-chartjs-2";
 import supabase from "../../utils/supabase";
 import style from "./DailySummary.module.scss";
-import type { EventInstance } from "../../utils/interfaces";
 
 ChartJS.register(
   CategoryScale,
@@ -63,12 +62,12 @@ export default function DailySummary() {
   const [numberOfEvents, setNumberOfEvents] = useState(0);
   const [peopleMet, setPeopleMet] = useState<PersonMet[]>([]);
   const [categories, setCategories] = useState<CategorySummary[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<CategorySummary | null>(null);
-  const [categoryEvents, setCategoryEvents] = useState<LocationEvent[]>([]);
+  // const [selectedCategory, setSelectedCategory] = useState<CategorySummary | null>(null);
+  // const [categoryEvents, setCategoryEvents] = useState<LocationEvent[]>([]);
   const [locationsVisited, setLocationsVisited] = useState<LocationVisited[]>([]);
   const [locationSort, setLocationSort] = useState<LocationSortOption>("none");
-  const [selectedLocation, setSelectedLocation] = useState<LocationVisited | null>(null);
-  const [locationEvents, setLocationEvents] = useState<LocationEvent[]>([]);
+  // const [selectedLocation, setSelectedLocation] = useState<LocationVisited | null>(null);
+  // const [locationEvents, setLocationEvents] = useState<LocationEvent[]>([]);
   const [selectedPerson, setSelectedPerson] = useState<PersonMet | null>(null);
   const [personEvents, setPersonEvents] = useState<LocationEvent[]>([]);
   const [peopleSearch, setPeopleSearch] = useState("");
@@ -78,7 +77,7 @@ export default function DailySummary() {
   const [totalSpent, setTotalSpent] = useState(0);
   const [dailySpending, setDailySpending] = useState<DailySpending[]>([]);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [dayEvents, setDayEvents] = useState<LocationEvent[]>([]);
+  // const [dayEvents, setDayEvents] = useState<LocationEvent[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -438,7 +437,7 @@ export default function DailySummary() {
                 <li
                   key={category.id}
                   // onClick={() => handleCategoryClick(category)}
-                  className={`${style.locationItem} ${selectedCategory?.id === category.id ? style.selected : ""}`}
+                  // className={`${style.locationItem} ${selectedCategory?.id === category.id ? style.selected : ""}`}
                 >
                   {category.name} - {category.eventCount} events
                 </li>
