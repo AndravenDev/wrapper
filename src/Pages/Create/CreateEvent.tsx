@@ -77,17 +77,14 @@ export default function CreateEvent() {
   }
 
   return (
-    <div className={style.container}>
-      <h1>Create</h1>
+    <div className={style.test}>
       <button
-        className={style.backButton}
         onClick={() => {
           navigate("/");
         }}
       >
-        Back to Home
+        Home
       </button>
-      <div className={style.sections}>
       <CreateCategory categories={categories} setCategories={setCategories} />
       <CreateCustomEvent
         categories={categories}
@@ -101,7 +98,6 @@ export default function CreateEvent() {
         measurements={measurements}
         setMeasurements={setMeasurements}
       />
-      </div>
     </div>
   );
 }
