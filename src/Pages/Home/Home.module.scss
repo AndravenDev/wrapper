@@ -1,237 +1,39 @@
-.container {
-  padding: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
-
-  h1 {
-    font-size: 2.5rem;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #ffd86f 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin: 0 0 25px;
-  }
-}
-
-.actions {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
-
-  button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
-    color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    &:last-child {
-      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-
-      &:hover {
-        box-shadow: 0 5px 20px rgba(67, 233, 123, 0.4);
-      }
-    }
-  }
-}
-
-.eventsList {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.dayGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.dateHeader {
-  font-size: 0.85rem;
-  font-weight: 500;
-  padding: 6px 12px;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.dayEvents {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding-left: 15px;
-}
-
 .question {
-  padding: 20px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-left: 4px solid #667eea;
-  border-radius: 16px;
+  padding: 10px;
+  border: 1px solid white;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  gap: 20px;
-  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-  backdrop-filter: blur(10px);
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    border-left-color: #f093fb;
-  }
-
-  // Alternate accent colors
-  &:nth-child(2n) {
-    border-left-color: #43e97b;
-    &:hover {
-      border-left-color: #38f9d7;
-    }
-  }
-
-  &:nth-child(3n) {
-    border-left-color: #fa709a;
-    &:hover {
-      border-left-color: #fee140;
-    }
-  }
-
-  &:nth-child(4n) {
-    border-left-color: #4facfe;
-    &:hover {
-      border-left-color: #00f2fe;
-    }
-  }
+  // width: 100%;
 
   .mainCardContent {
-    flex: 1;
-
     .title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #f0f0f0, #a0a0a0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-right: 15px;
-    }
-
-    button {
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      background: transparent;
-      color: white;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-
-      &:hover {
-        border-color: #667eea;
-        background: rgba(102, 126, 234, 0.2);
-      }
-    }
-
-    p {
-      margin: 10px 0;
-      opacity: 0.75;
-      line-height: 1.5;
+      margin-right: 20px;
+      font-size: 20px;
+      font-weight: 600;
     }
   }
 
   .eventMetaData {
     text-align: right;
-    min-width: 150px;
-    display: flex;
-
-    > div {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
-    }
-
-    span, p {
-      margin: 0;
-    }
+    // width: 20%;
   }
 
   .metadata {
     font-weight: 600;
-    color: #a78bfa;
   }
 
   .ammount {
     margin-right: 5px;
-    font-size: 1.1rem;
-    background: linear-gradient(135deg, #43e97b, #38f9d7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   .eventPeople {
-    margin-top: 12px;
-    padding: 10px 14px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-
-    span {
-      opacity: 0.8;
-    }
-
+    margin-right: 15px;
     .eventPerson {
       margin-right: 5px;
-      font-weight: 600;
-      color: #4facfe;
-    }
-  }
-
-  .rating {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    margin-top: auto !important;
-
-    &.good {
-      background: rgba(67, 233, 123, 0.15);
-      color: #43e97b;
-      border: 1px solid rgba(67, 233, 123, 0.3);
-    }
-
-    &.bad {
-      background: rgba(250, 112, 154, 0.15);
-      color: #fa709a;
-      border: 1px solid rgba(250, 112, 154, 0.3);
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .question {
-    flex-direction: column;
-
-    .eventMetaData {
-      text-align: left;
-      min-width: auto;
-      padding-top: 15px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 500;
     }
   }
 }
