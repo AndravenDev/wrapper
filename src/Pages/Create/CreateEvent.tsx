@@ -7,7 +7,7 @@ import type {
   Measurement,
   Person,
 } from "../../utils/interfaces";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import CreateCategory from "../../components/CreateCategory/CreateCategory";
 import CreateCustomEvent from "../../components/CreateEvent/CreateCustomEvent";
 import CreateLocation from "../../components/CreateLocation/CreateLocation";
@@ -20,12 +20,6 @@ export default function CreateEvent() {
   const [locations, setLocations] = useState<EventLocation[]>([]);
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
 
-  // const [] = useState<>();
-
-  const { id } = useParams();
-
-
-
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -33,16 +27,7 @@ export default function CreateEvent() {
     getPeople();
     getLocations();
     getMeasurements();
-
-    if(id){
-      getExistingEvent(parseInt(id));
-    }
   }, []);
-
-  async function getExistingEvent(eventId: number){
-    var { data } = await supabase.from("event").select().eq("eventId", eventId);
-    console.log('Datata ', data);
-  }
 
   async function getCategories() {
     var { data } = await supabase.from("categories").select();

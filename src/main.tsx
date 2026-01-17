@@ -5,7 +5,6 @@ import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import CreateEvent from './Pages/Create/CreateEvent.tsx';
 import Home from './Pages/Home/Home.tsx';
-import DailySummary from './Pages/DailySummary/DailySummary.tsx';
 
 const router = createBrowserRouter([
   {
@@ -15,14 +14,6 @@ const router = createBrowserRouter([
   {
     path: "createEvent",
     element: <CreateEvent />
-  },
-  {
-    path: "/createEvent/:id?",
-    element: <CreateEvent />
-  },
-  {
-    path: "dailySummary",
-    element: <DailySummary />
   }
 ]);
 
