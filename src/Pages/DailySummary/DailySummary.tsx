@@ -12,7 +12,6 @@ import {
 import { Bar } from "react-chartjs-2";
 import supabase from "../../utils/supabase";
 import style from "./DailySummary.module.scss";
-import type { EventInstance } from "../../utils/interfaces";
 
 ChartJS.register(
   CategoryScale,
@@ -42,8 +41,8 @@ interface LocationEvent {
   description: string;
   date: string;
   ammount: number;
-  measurements: { name: string };  // Changed to array
-  locations: { name: string };      // Already array, ensure consistency
+  measurements: { name: string }[];  // Changed to array
+  locations: { name: string }[];      // Already array, ensure consistency
 }
 
 interface CategorySummary {
@@ -231,7 +230,7 @@ export default function DailySummary() {
     if (data?.length) {
       // Aggregate visit count and spending per location
       const locationData = new Map<number, LocationVisited>();
-      data.forEach((item: any) => {
+      data.forEach((item: { ammount: number; measurementId: number; locations: { locationId: number; name: string } }) => {
         if (item.locations) {
           const existing = locationData.get(item.locations.locationId);
           const spendingAmount = item.measurementId === 1 ? (item.ammount ?? 0) : 0;
@@ -300,7 +299,7 @@ export default function DailySummary() {
       if (elements.length > 0) {
         const index = elements[0].index;
         const clickedDate = dailySpending[index].date;
-        // handleDayClick(clickedDate);
+        handleDayClick(clickedDate);
       }
     },
     plugins: {
@@ -331,51 +330,51 @@ export default function DailySummary() {
     },
   };
 
-//   async function handleDayClick(dateStr: string) {
-//     setSelectedDay(dateStr);
+  async function handleDayClick(dateStr: string) {
+    setSelectedDay(dateStr);
 
-//     // Parse the date string (dd/mm/yyyy) to create date range
-//     const [day, month, year] = dateStr.split("/").map(Number);
-//     const startDate = new Date(Date.UTC(year, month - 1, day));
-//     const endDate = new Date(Date.UTC(year, month - 1, day + 1));
+    // Parse the date string (dd/mm/yyyy) to create date range
+    const [day, month, year] = dateStr.split("/").map(Number);
+    const startDate = new Date(Date.UTC(year, month - 1, day));
+    const endDate = new Date(Date.UTC(year, month - 1, day + 1));
 
-//     const { data, error } = await supabase
-//       .from("event")
-//       .select("eventId, title, description, date, ammount, measurements!left(name), locations!left(name)")
-//       .gte("date", startDate.toISOString())
-//       .lt("date", endDate.toISOString())
-//       .order("date", { ascending: false });
+    const { data, error } = await supabase
+      .from("event")
+      .select("eventId, title, description, date, ammount, measurements!left(name), locations!left(name)")
+      .gte("date", startDate.toISOString())
+      .lt("date", endDate.toISOString())
+      .order("date", { ascending: false });
 
-//     if (error) {
-//       console.log("Error fetching day events: ", error);
-//       return;
-//     }
-// console.log('wtf ', data);
-//     setDayEvents(data ?? []);
-//   }
+    if (error) {
+      console.log("Error fetching day events: ", error);
+      return;
+    }
 
-  // async function handleLocationClick(location: LocationVisited) {
-  //   if (selectedLocation?.locationId === location.locationId) {
-  //     setSelectedLocation(null);
-  //     setLocationEvents([]);
-  //     return;
-  //   }
+    setDayEvents(data ?? []);
+  }
 
-  //   setSelectedLocation(location);
+  async function handleLocationClick(location: LocationVisited) {
+    if (selectedLocation?.locationId === location.locationId) {
+      setSelectedLocation(null);
+      setLocationEvents([]);
+      return;
+    }
 
-  //   const { data, error } = await supabase
-  //     .from("event")
-  //     .select("eventId, title, description, date, ammount, measurements!left(name), locations!left(name)")
-  //     .eq("locationId", location.locationId)
-  //     .order("date", { ascending: false });
+    setSelectedLocation(location);
 
-  //   if (error) {
-  //     console.log("Error fetching location events: ", error);
-  //     return;
-  //   }
+    const { data, error } = await supabase
+      .from("event")
+      .select("eventId, title, description, date, ammount, measurements!left(name), locations!left(name)")
+      .eq("locationId", location.locationId)
+      .order("date", { ascending: false });
 
-  //   setLocationEvents(data ?? []);
-  // }
+    if (error) {
+      console.log("Error fetching location events: ", error);
+      return;
+    }
+
+    setLocationEvents(data ?? []);
+  }
 
   async function handlePersonClick(person: PersonMet) {
     if (selectedPerson?.personId === person.personId) {
@@ -397,32 +396,32 @@ export default function DailySummary() {
       return;
     }
 
-    const events = data?.map((value: any) => value.event) ?? [];
+    const events = data?.map((item: { event: LocationEvent }) => item.event) ?? [];
     setPersonEvents(events);
   }
 
-  // async function handleCategoryClick(category: CategorySummary) {
-  //   if (selectedCategory?.id === category.id) {
-  //     setSelectedCategory(null);
-  //     setCategoryEvents([]);
-  //     return;
-  //   }
+  async function handleCategoryClick(category: CategorySummary) {
+    if (selectedCategory?.id === category.id) {
+      setSelectedCategory(null);
+      setCategoryEvents([]);
+      return;
+    }
 
-  //   setSelectedCategory(category);
+    setSelectedCategory(category);
 
-  //   const { data, error } = await supabase
-  //     .from("event")
-  //     .select("eventId, title, description, date, ammount, measurements!left(name), locations!left(name)")
-  //     .eq("categoryId", category.id)
-  //     .order("date", { ascending: false });
+    const { data, error } = await supabase
+      .from("event")
+      .select("eventId, title, description, date, ammount, measurements!left(name), locations!left(name)")
+      .eq("categoryId", category.id)
+      .order("date", { ascending: false });
 
-  //   if (error) {
-  //     console.log("Error fetching category events: ", error);
-  //     return;
-  //   }
+    if (error) {
+      console.log("Error fetching category events: ", error);
+      return;
+    }
 
-  //   setCategoryEvents(data ?? []);
-  // }
+    setCategoryEvents(data ?? []);
+  }
 
   return (
     <div className={style.container}>
@@ -437,13 +436,35 @@ export default function DailySummary() {
               {categories.map((category) => (
                 <li
                   key={category.id}
-                  // onClick={() => handleCategoryClick(category)}
+                  onClick={() => handleCategoryClick(category)}
                   className={`${style.locationItem} ${selectedCategory?.id === category.id ? style.selected : ""}`}
                 >
                   {category.name} - {category.eventCount} events
                 </li>
               ))}
             </ul>
+          )}
+          {selectedCategory && (
+            <div className={style.eventsPanel}>
+              <h4>Events in {selectedCategory.name}</h4>
+              {categoryEvents.length > 0 ? (
+                <ul>
+                  {categoryEvents.map((event) => (
+                    <li key={event.eventId} className={style.eventItem}>
+                      <strong>{event.title}</strong>
+                      <p>{event.description}</p>
+                      <span className={style.eventMeta}>
+                        {new Date(event.date).toLocaleDateString("en-UK")}
+                        {event.locations?.name ? ` @ ${event.locations.name}` : ""}
+                        {event.ammount ? ` - ${event.ammount} ${event.measurements?.name ?? ""}` : ""}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No events found</p>
+              )}
+            </div>
           )}
         </div>
       </div>
@@ -543,7 +564,7 @@ export default function DailySummary() {
                   key={location.locationId}
                   onClick={() => {
                     setLocationSearch(location.name);
-                    // handleLocationClick(location);
+                    handleLocationClick(location);
                   }}
                 >
                   {location.name} - {location.visitCount} visits
@@ -579,7 +600,7 @@ export default function DailySummary() {
               {filteredLocations.map((location) => (
                 <li
                   key={location.locationId}
-                  // onClick={() => handleLocationClick(location)}
+                  onClick={() => handleLocationClick(location)}
                   className={`${style.locationItem} ${selectedLocation?.locationId === location.locationId ? style.selected : ""}`}
                 >
                   {location.name} - {location.visitCount} visits, {location.totalSpent.toFixed(2)} spent
