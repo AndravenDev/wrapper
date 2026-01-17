@@ -297,7 +297,7 @@ export default function DailySummary() {
     maintainAspectRatio: false,
     onClick: (_event: unknown, elements: { index: number }[]) => {
       if (elements.length > 0) {
-        // const index = elements[0].index;
+        const index = elements[0].index;
         // const clickedDate = dailySpending[index].date;
         // handleDayClick(clickedDate);
       }
