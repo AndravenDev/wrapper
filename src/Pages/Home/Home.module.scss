@@ -1,39 +1,44 @@
-.question {
-  padding: 10px;
-  border: 1px solid white;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  // width: 100%;
+.homeWrapper {
+  padding-left: 10px;
+  padding-right: 10px;
+  
+  .question {
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    // width: 100%;
 
-  .mainCardContent {
-    .title {
-      margin-right: 20px;
-      font-size: 20px;
+    .mainCardContent {
+      .title {
+        margin-right: 20px;
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+
+    .eventMetaData {
+      text-align: right;
+      // width: 20%;
+    }
+
+    .metadata {
       font-weight: 600;
     }
-  }
 
-  .eventMetaData {
-    text-align: right;
-    // width: 20%;
-  }
-
-  .metadata {
-    font-weight: 600;
-  }
-
-  .ammount {
-    margin-right: 5px;
-  }
-
-  .eventPeople {
-    margin-right: 15px;
-    .eventPerson {
+    .ammount {
       margin-right: 5px;
-      font-weight: 500;
+    }
+
+    .eventPeople {
+      margin-right: 15px;
+      .eventPerson {
+        margin-right: 5px;
+        font-weight: 500;
+      }
     }
   }
 }

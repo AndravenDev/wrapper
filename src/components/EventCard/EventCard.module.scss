@@ -1,0 +1,58 @@
+.gradientBorder {  
+  padding: 3px 3px 3px 3px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+
+
+}
+
+.goodExperience {
+  background: #2A7B9B;
+  background: linear-gradient(199deg,rgba(42, 123, 155, 0.19) 43%, rgba(69, 233, 96, 1) 100%);
+}
+
+.midExperience {
+background: #2A7B9B;
+background: linear-gradient(199deg, rgba(42, 123, 155, 0.19) 43%, rgba(69, 233, 228, 1) 100%);
+}
+
+.badExperience {
+  background: #2A7B9B;
+  background: linear-gradient(199deg, rgba(42, 123, 155, 0.19) 43%, rgba(233, 69, 96, 1) 100%);
+}
+
+.eventCard {
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #0F3460;
+
+  .mainCardContent {
+    .title {
+      margin-right: 20px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+
+  .eventMetaData {
+    text-align: right;
+  }
+
+  .metadata {
+    font-weight: 600;
+  }
+
+  .ammount {
+    margin-right: 5px;
+  }
+
+  .eventPeople {
+    margin-right: 15px;
+    .eventPerson {
+      margin-right: 5px;
+      font-weight: 500;
+    }
+  }
+}

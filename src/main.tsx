@@ -5,6 +5,7 @@ import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import CreateEvent from './Pages/Create/CreateEvent.tsx';
 import Home from './Pages/Home/Home.tsx';
+import Summary from './Pages/Summary/Summary.tsx';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
   {
     path: "createEvent",
     element: <CreateEvent />
+  },
+  {
+    path: "summary",
+    element: <Summary />
   }
 ]);
 
