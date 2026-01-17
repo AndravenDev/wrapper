@@ -41,8 +41,8 @@ interface LocationEvent {
   description: string;
   date: string;
   ammount: number;
-  measurements: { name: string }[];  // Changed to array
-  locations: { name: string }[];      // Already array, ensure consistency
+  measurements: { name: string } | null;
+  locations: { name: string } | null;
 }
 
 interface CategorySummary {
