@@ -43,7 +43,7 @@ export default function Dashboard() {
       }
     });
     return Array.from(result).sort(
-      ([nameA, valA], [nameB, valB]) => valB.eventCount - valA.eventCount,
+      ([, valA], [, valB]) => valB.eventCount - valA.eventCount,
     );
   }
 
