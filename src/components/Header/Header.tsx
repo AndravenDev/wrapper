@@ -36,6 +36,10 @@ export default function Header() {
             Summary
           </button>
 
+          <button className={style.navBtn} onClick={() => navigate("dashboard")}>
+            Dashboard
+          </button>
+
           <button
             className={`${style.navBtn} ${style.primaryLink}`}
             onClick={() => navigate("createEvent")}

@@ -7,6 +7,7 @@ import CreateEvent from './Pages/Create/CreateEvent.tsx';
 import Home from './Pages/Home/Home.tsx';
 import Summary from './Pages/Summary/Summary.tsx';
 import Layout from './components/Layout/Layout.tsx';
+import Dashboard from './Pages/Dashboard/Dashboard.tsx';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "summary",
         element: <Summary />
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />
       }
     ]
   }

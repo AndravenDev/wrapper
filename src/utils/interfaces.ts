@@ -17,7 +17,25 @@ export interface EventInstance {
   positive: undefined;
   measurements: Measurement;
   locations: EventLocation;
-  event_people: People[];
+  event_people?: People[];
+}
+
+export interface EventDTO {
+  eventId: number;
+  category: Category;
+  title: string;
+  description: string;
+  date: Date;
+  location: EventLocation;
+  measurement: Measurement;
+  withPartner: boolean;
+  positive: boolean;
+  ammount: number;
+}
+
+export interface Measurement {
+  measurementId: number;
+  name: string;
 }
 
 export interface EventPeople {

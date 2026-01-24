@@ -15,7 +15,7 @@ export default function EventCard({ event }: EventCardProps) {
           <span className={style.title}>{event.title}</span>
           <p>Details: {event.description}</p>
           <div className={style.eventPeople}>
-            {event.event_people.length ? (
+            {event.event_people?.length ? (
               <div>
                 <span>With: </span>
                 {event.event_people.map((event_person, index) => {
@@ -25,7 +25,7 @@ export default function EventCard({ event }: EventCardProps) {
                       key={event_person.people.personId}
                     >
                       {event_person.people.name}
-                      {index === event.event_people.length - 1 ? "" : ","}
+                      {index === (event.event_people ?? []).length - 1 ? "" : ","}
                     </span>
                   );
                 })}
